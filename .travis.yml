@@ -20,4 +20,4 @@ script:
     - cd build
     - ctest -v
     - cd ..
-    - find $HOME/.local/hello/
+    - find $HOME/.local/hello/ -type f
