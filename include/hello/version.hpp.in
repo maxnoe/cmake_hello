@@ -1,0 +1,6 @@
+#ifndef HELLO_VERSION_H
+#define HELLO_VERSION_H
+#include <string>
+
+const std::string HELLO_VERSION = "@PROJECT_VERSION@";
+#endif
