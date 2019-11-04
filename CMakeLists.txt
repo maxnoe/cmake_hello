@@ -15,6 +15,9 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 add_library(hellolib SHARED src/hello.cpp include/hello/hello.hpp include/hello/version.hpp)
 target_include_directories(hellolib PUBLIC include)
 target_include_directories(hellolib PUBLIC ${PROJECT_BINARY_DIR}/include)
+target_compile_features(hellolib PUBLIC cxx_std_11)
+set_target_properties(hellolib PROPERTIES CXX_EXTENSIONS OFF)
+
 
 # cmake cannot have to targets with the same name but we want
 # libhello not libhellolib
@@ -28,6 +31,9 @@ configure_file(
 # add our executable hello and link it against our library
 add_executable(hello apps/hello.cpp)
 target_link_libraries(hello PUBLIC hellolib)
+target_compile_features(hello PUBLIC cxx_std_11)
+set_target_properties(hello PROPERTIES CXX_EXTENSIONS OFF)
+
 
 if(CMAKE_PROJECT_NAME STREQUAL CMakeHello)
 	include(CTest)
