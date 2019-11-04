@@ -31,4 +31,11 @@ target_link_libraries(hello PUBLIC hellolib)
 
 # enable installing, defaults are sane, e.g. exe goes into bin, lib into lib, 
 # headers into include
-install(TARGETS hello hellolib)
+install(
+	TARGETS hello hellolib
+	PUBLIC_HEADER DESTINATION include/hello
+)
+install(
+	FILES ${PROJECT_BINARY_DIR}/include/hello/version.hpp include/hello/hello.hpp
+	DESTINATION include/hello/
+)
