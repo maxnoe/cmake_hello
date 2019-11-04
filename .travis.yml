@@ -3,6 +3,13 @@ language: cpp
 compiler: gcc
 dist: bionic # gcc 7, cmake 3.12
 
+before_install:
+    - curl -L https://github.com/Kitware/CMake/releases/download/v3.15.5/cmake-3.15.5.tar.gz | tar xz
+    - cd cmake-3.15.5
+    - cmake . -DCMAKE_INSTALL_PREFIX=$HOME/.local
+    - make
+    - make install
+    - export PATH="$HOME/.local/bin:$PATH"
 
 install:
     - cmake -S . -B build
