@@ -8,14 +8,16 @@ env:
 
 before_install:
     - mkdir -p $HOME/.local/cmake
-    - curl -L $CMAKE_URL | tar xz -C $HOME/.local/cmake --strip-components=1
+    - curl -fsSL $CMAKE_URL | tar xz -C $HOME/.local/cmake --strip-components=1
     - export PATH="$HOME/.local/cmake/bin:$PATH"
 
 install:
-    - cmake -S . -B build
+    - cmake -S . -B build -DCMAKE_INSTALL_PREFIX="$HOME/.local/hello"
     - cmake --build build
+    - cmake --install build
     
 script:
     - cd build
     - ctest -v
     - cd ..
+    - find $HOME/.local/hello/
