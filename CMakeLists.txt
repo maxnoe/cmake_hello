@@ -29,6 +29,13 @@ configure_file(
 add_executable(hello apps/hello.cpp)
 target_link_libraries(hello PUBLIC hellolib)
 
+if(CMAKE_PROJECT_NAME STREQUAL CMakeHello)
+	include(CTest)
+endif()
+if(CMAKE_PROJECT_NAME STREQUAL CMakeHello AND BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
+
 # enable installing, defaults are sane, e.g. exe goes into bin, lib into lib, 
 # headers into include
 install(
