@@ -5,10 +5,10 @@ dist: bionic # gcc 7, cmake 3.12
 
 
 install:
-    cmake -S . -B build
-    cmake --build build
+    - cmake -S . -B build
+    - cmake --build build
     
 script:
-    cd build
-    ctest -v
-    cd ..
+    - cd build
+    - ctest -v
+    - cd ..
