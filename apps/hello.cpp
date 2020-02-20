@@ -13,9 +13,9 @@ int main(int argc, char* argv[]) {
 		greet();
 	} else {
 		std::string arg(argv[1]);
-		if (arg == "-v") {
+		if (arg == "-v" || arg == "--version") {
 			std::cout << "hello version " << HELLO_VERSION << std::endl;
-		} else if (arg == "-h") {
+		} else if (arg == "-h" || arg == "--help") {
 			std::cerr << "Usage hello [name]" << std::endl;
 		} else {
 			greet(arg);
