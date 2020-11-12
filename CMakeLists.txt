@@ -1,20 +1,35 @@
-cmake_minimum_required(VERSION 3.1...3.15)
+cmake_minimum_required(VERSION 3.15...3.18)
 
-project(CMakeHello VERSION 0.1.0 LANGUAGES CXX)
+project(Hello VERSION 0.1.0 LANGUAGES CXX)
+
+# provides CMAKE_INSTALL_BINDIR / CMAKE_INSTALL_LIBDIR etc.
+include(GNUInstallDirs)
 
 # By default, cmake clears the runtime search
 # patch for libraries from exectuables, which would
 # result in library not found or having to set LD_LIBRARY_PATH
 # this sets the rpath to the installation location of the library
 # https://stackoverflow.com/a/30400628/3838691
-set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-
 
 # add our shared library libhello
 add_library(hellolib SHARED src/hello.cpp include/hello/hello.hpp include/hello/version.hpp)
-target_include_directories(hellolib PUBLIC include)
-target_include_directories(hellolib PUBLIC ${PROJECT_BINARY_DIR}/include)
+
+# we need to give different include dirs for this file
+# for building and for other people consuming our library from an
+# installed location
+target_include_directories(
+    hellolib PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+# for the auto generated header
+target_include_directories(
+    hellolib PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
 target_compile_features(hellolib PUBLIC cxx_std_11)
 set_target_properties(hellolib PROPERTIES CXX_EXTENSIONS OFF)
 
@@ -33,6 +48,7 @@ add_executable(hello apps/hello.cpp)
 target_link_libraries(hello PUBLIC hellolib)
 target_compile_features(hello PUBLIC cxx_std_11)
 set_target_properties(hello PROPERTIES CXX_EXTENSIONS OFF)
+set_target_properties(hello PROPERTIES PUBLIC_HEADER "${PROJECT_BINARY_DIR}/include/hello/version.hpp;include/hello/hello.hpp")
 
 
 if(CMAKE_PROJECT_NAME STREQUAL CMakeHello)
@@ -42,13 +58,30 @@ if(CMAKE_PROJECT_NAME STREQUAL CMakeHello AND BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-# enable installing, defaults are sane, e.g. exe goes into bin, lib into lib, 
-# headers into include
+# enable installing, defaults are sane, e.g. exe goes into bin, lib into lib
+# but for the public headers, we want them in a sub folder for our project.
 install(
-	TARGETS hello hellolib
-	PUBLIC_HEADER DESTINATION include/hello
+    TARGETS hello hellolib
+    EXPORT HelloConfig
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hello
+)
+
+# Exporting so that other projects can do find_project(Hello)
+include(CMakePackageConfigHelpers)
+export(
+    TARGETS hello hellolib
+    NAMESPACE Hello::
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/HelloConfig.cmake"
+)
+write_basic_package_version_file(
+    HelloConfigVersion.cmake
+    COMPATIBILITY SameMajorVersion
 )
 install(
-	FILES ${PROJECT_BINARY_DIR}/include/hello/version.hpp include/hello/hello.hpp
-	DESTINATION include/hello/
+    EXPORT HelloConfig
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/Hello"
+)
+install(
+    FILES "${CMAKE_CURRENT_BINARY_DIR}/HelloConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/Hello"
 )
