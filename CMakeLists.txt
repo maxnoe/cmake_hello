@@ -48,7 +48,13 @@ add_executable(hello apps/hello.cpp)
 target_link_libraries(hello PUBLIC hellolib)
 target_compile_features(hello PUBLIC cxx_std_11)
 set_target_properties(hello PROPERTIES CXX_EXTENSIONS OFF)
-set_target_properties(hello PROPERTIES PUBLIC_HEADER "${PROJECT_BINARY_DIR}/include/hello/version.hpp;include/hello/hello.hpp")
+
+# using a variable to convert to list
+set(HELLO_HEADERS
+    "${PROJECT_BINARY_DIR}/include/hello/version.hpp"
+    "include/hello/hello.hpp"
+)
+set_target_properties(hello PROPERTIES PUBLIC_HEADER "${HELLO_HEADERS}")
 
 
 if(CMAKE_PROJECT_NAME STREQUAL CMakeHello)
