@@ -12,7 +12,8 @@ RPATH handling from https://cliutils.gitlab.io/modern-cmake
 Use:
 ```
 cmake -S . -B build [-DCMAKE_INSTALL_PREFIX=...]
-cmake --build build [--target install]
+cmake --build build -- [-j CORES]
+cmake --install build
 cd build
 ctest -v
 ```
