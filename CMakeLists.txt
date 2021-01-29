@@ -71,7 +71,7 @@ export(
     FILE "${CMAKE_CURRENT_BINARY_DIR}/FibonacciConfig.cmake"
 )
 write_basic_package_version_file(
-    fibonacciConfigVersion.cmake
+    FibonacciConfigVersion.cmake
     COMPATIBILITY SameMajorVersion
 )
 install(
