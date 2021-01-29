@@ -1,0 +1,6 @@
+#ifndef FIBONACCI_VERSION_H
+#define FIBONACCI_VERSION_H
+#include <string>
+
+const std::string FIBONACCI_VERSION = "@PROJECT_VERSION@";
+#endif
