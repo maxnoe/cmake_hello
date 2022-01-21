@@ -38,8 +38,8 @@ target_include_directories(
 
 # add our executable fibonacci and link it against our library
 add_executable(fibonacci-cli cli/fibonacci.cpp)
-target_link_libraries(fibonacci-cli PUBLIC fibonacci)
-target_compile_features(fibonacci-cli PUBLIC cxx_std_11)
+target_link_libraries(fibonacci-cli PRIVATE fibonacci)
+target_compile_features(fibonacci-cli PRIVATE cxx_std_11)
 set_target_properties(
     fibonacci-cli PROPERTIES
     CXX_EXTENSIONS OFF
@@ -49,7 +49,7 @@ set_target_properties(
 
 
 
-# Run testing only if people build our project
+# Run testing only if people build our project directly
 include(CTest)
 if(CMAKE_PROJECT_NAME STREQUAL fibonacci AND BUILD_TESTING)
     add_subdirectory(tests)
@@ -76,9 +76,9 @@ write_basic_package_version_file(
 )
 install(
     EXPORT FibonacciConfig
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/fibonacci/cmake"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/fibonacci"
 )
 install(
     FILES "${CMAKE_CURRENT_BINARY_DIR}/FibonacciConfigVersion.cmake"
-    DESTINATION "${CMAKE_INSTALL_DATADIR}/fibonacci/cmake"
+    DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/fibonacci"
 )
