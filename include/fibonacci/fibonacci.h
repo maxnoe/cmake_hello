@@ -3,6 +3,9 @@
 #include <vector>
 #include "fibonacci/version.h"
 
-std::vector<unsigned long> fibonacci_numbers(unsigned int n);
+namespace fibonacci {
+    using numbers_t = std::vector<unsigned long>;
+    numbers_t fibonacci_numbers(unsigned int n);
+}
 
 #endif

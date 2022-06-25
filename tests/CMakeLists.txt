@@ -1,24 +1,9 @@
-add_subdirectory("${PROJECT_SOURCE_DIR}/extern/googletest" "extern/googletest" EXCLUDE_FROM_ALL)
-
-mark_as_advanced(
-    BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
-    gmock_build_tests gtest_build_samples gtest_build_tests
-    gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
-)
+find_package(Catch2 3 REQUIRED)
 
 
-set_target_properties(gtest PROPERTIES FOLDER extern)
-set_target_properties(gtest_main PROPERTIES FOLDER extern)
-set_target_properties(gmock PROPERTIES FOLDER extern)
-set_target_properties(gmock_main PROPERTIES FOLDER extern)
+add_executable(tests test1.cpp)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain fibonacci)
 
-
-macro(package_add_test TESTNAME)
-    add_executable(${TESTNAME} ${ARGN})
-    target_link_libraries(${TESTNAME} gtest gmock gtest_main fibonacci)
-    add_test(NAME ${TESTNAME} COMMAND ${TESTNAME})
-    set_target_properties(${TESTNAME} PROPERTIES FOLDER tests)
-endmacro()
-
-
-package_add_test(test1 test1.cpp)
+include(CTest)
+include(Catch)
+catch_discover_tests(tests)

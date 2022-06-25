@@ -1,26 +1,29 @@
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_vector.hpp>
+
 #include "fibonacci/fibonacci.h"
 
-using testing::ElementsAre;
+using Catch::Matchers::Equals;
+using fibonacci::fibonacci_numbers;
+using fibonacci::numbers_t;
 
-TEST(Fibonacci, Test0) {
+
+TEST_CASE("Fib 0") {
     auto fib = fibonacci_numbers(0);
-    ASSERT_EQ(0, fib.size());
+    REQUIRE(fib.size() == 0);
 }
 
-TEST(Fibonacci, Test1) {
+TEST_CASE("Fib 1") {
     auto fib = fibonacci_numbers(1);
-    ASSERT_THAT(fib, ElementsAre(1));
+    REQUIRE_THAT(fib, Equals(numbers_t{0, }));
 }
 
-TEST(Fibonacci, Test2) {
+TEST_CASE("Fib 2") {
     auto fib = fibonacci_numbers(2);
-    ASSERT_THAT(fib, ElementsAre(1, 1));
+    REQUIRE_THAT(fib, Equals(numbers_t{0, 1}));
 }
 
-
-TEST(Fibonacci, Test10) {
+TEST_CASE("Fib 10") {
     auto fib = fibonacci_numbers(10);
-    ASSERT_THAT(fib, ElementsAre(1, 1, 2, 3, 5, 8, 13, 21, 34, 55));
+    REQUIRE_THAT(fib, Equals(numbers_t{0, 1, 1, 2, 3, 5, 8, 13, 21, 34}));
 }

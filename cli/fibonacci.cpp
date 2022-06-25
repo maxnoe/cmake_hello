@@ -2,6 +2,8 @@
 #include <string>
 #include "fibonacci/fibonacci.h"
 
+using fibonacci::fibonacci_numbers;
+
 
 int main(int argc, char* argv[]) {
 	if (argc == 1 || argc > 2) {

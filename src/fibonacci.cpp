@@ -1,13 +1,15 @@
 #include <vector>
 #include "fibonacci/fibonacci.h"
 
-std::vector<unsigned long> fibonacci_numbers(unsigned int n) {
+namespace fibonacci {
+
+numbers_t fibonacci_numbers(unsigned int n) {
     std::vector<unsigned long> numbers;
     numbers.reserve(n);
 
     if (n == 0) return numbers;
 
-    numbers.push_back(1);
+    numbers.push_back(0);
 
     if (n == 1) return numbers;
 
@@ -20,4 +22,6 @@ std::vector<unsigned long> fibonacci_numbers(unsigned int n) {
     }
 
     return numbers;
+}
+
 }
