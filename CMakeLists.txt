@@ -14,7 +14,7 @@ configure_file(
 	"${PROJECT_BINARY_DIR}/include/fibonacci/version.h"
 )
 
-add_library(fibonacci SHARED
+add_library(fibonacci
     src/fibonacci.cpp
     include/fibonacci/fibonacci.h
     ${PROJECT_BINARY_DIR}/include/fibonacci/version.h
