@@ -1,0 +1,21 @@
+on:
+  push:
+  pull_request:
+
+jobs:
+  cmake_build:
+    name: "CMake build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: "Build"
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_CXX_FLAGS="-Werror -Wextra -Wall -Wpedantic -Wconversion -Wsign-compare -Wunreachable-code -Wunused" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=~/.local/fibonacci
+          cmake --build build -- -j 2
+          cmake --install build
