@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.18)
+cmake_minimum_required(VERSION 3.23...3.25)
 
 project(fibonacci VERSION 0.1.0 LANGUAGES CXX)
 
@@ -10,30 +10,29 @@ include(cmake/RPATHHandling.cmake)
 
 # add version info from the project call into a header file
 configure_file(
-	include/fibonacci/version.h.in
-	"${PROJECT_BINARY_DIR}/include/fibonacci/version.h"
+    include/fibonacci/version.h.in
+    "${PROJECT_BINARY_DIR}/include/fibonacci/version.h"
 )
 
 add_library(fibonacci
     src/fibonacci.cpp
-    include/fibonacci/fibonacci.h
-    ${PROJECT_BINARY_DIR}/include/fibonacci/version.h
+)
+
+target_sources(
+    fibonacci
+    PUBLIC FILE_SET HEADERS
+    FILES
+        include/fibonacci/fibonacci.h
+        ${PROJECT_BINARY_DIR}/include/fibonacci/version.h
+    BASE_DIRS
+        include
+        ${PROJECT_BINARY_DIR}/include
 )
 
 # our library and everyone that uses it must at least use cxx 11
 target_compile_features(fibonacci PUBLIC cxx_std_11)
 # we will use c++11, not some compiler specific standard like gnu++11
 set_target_properties(fibonacci PROPERTIES CXX_EXTENSIONS OFF CXX_STANDARD_REQUIRED ON)
-
-
-# we need to give different include dirs for this file
-# for building and for other people consuming our library from an
-# installed location
-target_include_directories(
-    fibonacci PUBLIC
-    $<BUILD_INTERFACE:include;${PROJECT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-)
 
 
 # add our executable fibonacci and link it against our library
@@ -60,8 +59,9 @@ endif()
 install(
     TARGETS fibonacci fibonacci-cli
     EXPORT FibonacciConfig
+    FILE_SET HEADERS
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-install(DIRECTORY include/fibonacci DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # Exporting so that other projects can do find_project(fibonacci)
 include(CMakePackageConfigHelpers)

@@ -21,6 +21,7 @@ jobs:
 
       - name: "Build"
         run: |
+          cmake --version
           cmake -S . -B build \
             -DCMAKE_CXX_FLAGS="-Werror -Wextra -Wall -Wpedantic -Wconversion -Wsign-compare -Wunreachable-code -Wunused" \
             -DCMAKE_BUILD_TYPE=Release \
@@ -28,6 +29,12 @@ jobs:
             -DBUILD_SHARED_LIBS=ON
           cmake --build build -- -j 2
           cmake --install build
+
+      - name: "Run"
+        run: |
+          ~/.local/fibonacci/bin/fibonacci -v
+          ~/.local/fibonacci/bin/fibonacci -h
+          ~/.local/fibonacci/bin/fibonacci 10
 
       - name: "Tests"
         run: |
